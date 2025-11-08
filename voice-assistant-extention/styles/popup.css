@@ -1,3 +1,22 @@
+/* -----------------------------------------------------------------------------------------
+GENERAL
+------------------------------------------------------------------------------------------ */ 
+
+
+html, body {
+  width: 350px;   /* hard-codes window size */
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
+    font-family: 'Goldman', sans-serif;
+}
+
+
 .header {
     display: flex;
     align-items: center;
@@ -6,11 +25,7 @@
     width: 100%;
 }
 
-h1 {
-    margin: 0;
-    text-align: center;
-    flex-grow: 1;
-}
+
 
 /* -----------------------------------------------------------------------------------------
 HELP & SETTINGS BUTTONS
@@ -27,15 +42,34 @@ HELP & SETTINGS BUTTONS
     margin-right: 10px;
 }
 
+/* Note: ts is hard coded sorry :( */
 .settings-cog {
-    margin-left: 10px;
+    margin-right: 20px;
+
 }
 
 /* -----------------------------------------------------------------------------------------
 // SLIDER CONTAINER BOX STYLING 
 ------------------------------------------------------------------------------------------ */ 
 
+.status-container {
 
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Puts slider on far right */
+  gap: 10px;
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+  background-color: #BBBB;
+  border-radius: 10px;
+  border: 1px solid black; /* Stroke */
+  padding: 12px 16px;
+  margin: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Depth */
+  font-size: 15px;
+  width: auto; /* Automatically scales container width WOW! */
+
+}
 
 /* -----------------------------------------------------------------------------------------
 // SLIDER SWITCH STYLING 

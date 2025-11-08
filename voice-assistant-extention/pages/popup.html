@@ -1,3 +1,8 @@
+<!--
+Main popup file when  user open's extension.
+-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +10,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main</title>
     <link rel="stylesheet" href="../styles/popup.css">
+
+    <!-- Goldman Font Import-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <div class="header">
@@ -15,24 +26,25 @@
 
 
     <!-- Slider container box -->
-    <div class="status-box"> 
-
+    <div class="status-container"> 
+        
+        <!-- Status text position-->
+        <div id="status-text">
+        <span><b>Status: </b></span>
+        <span id="statusText">OFF</span> <!-- Set OFF by defeault -->
+        </div>
 
     <!-- Slider for toggling extension -->
-        <div class="status">
 
-        
-            <label class="switch">
-            <input type="checkbox" id="serviceToggle">
-            <span class="slider"></span>
-            </label>
-
-        </div>
+        <label class="switch">
+        <input type="checkbox" id="serviceToggle">
+        <span class="slider"></span>
+        </label>
     </div>
 
     
     <!-- JavaScript Functionality Link-->
-    <script src="popup.js"></script>
+    <script src="../popup.js"></script>
 
 </body>
 </html>
