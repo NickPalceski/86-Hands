@@ -1,14 +1,49 @@
+<!--
+Main settings page for the extension
+-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings</title>
-    <link rel = "stylesheet" href="styles/settings.css">
+    <title>Main</title>
+    <link rel="stylesheet" href="../styles/settings.css">
+
+    <!-- Goldman Font Import-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <p>Settings</p>
+    <div class="header">
+        <img src="../images/lightModeBackBtn.png" class="back-btn" alt="Back Button"/>
+        <h1>86Hands</h1>
+    </div>
+
+
+    <!-- Slider container box -->
+    <div class="darkmode-container"> 
+        
+        <!-- Status text position-->
+        <div id="darkmode-text">
+        <span><b>Dark Mode: </b></span>
+        <span id="darkmodeText">OFF</span> <!-- Set OFF by defeault -->
+        </div>
+
+    <!-- Slider for toggling extension -->
+
+        <label class="switch">
+        <input type="checkbox" id="serviceToggle">
+        <span class="slider"></span>
+        </label>
+    </div>
 
     
+    <!-- JavaScript Functionality Link-->
+    <script src="../settings.js"></script>
+
 </body>
 </html>

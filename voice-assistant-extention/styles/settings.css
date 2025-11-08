@@ -1,0 +1,118 @@
+/* -----------------------------------------------------------------------------------------
+GENERAL
+------------------------------------------------------------------------------------------ */ 
+
+
+html, body {
+  width: 350px;   /* hard-codes window size */
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+    margin: 0;
+    margin-right: 44px;
+    text-align: center;
+    flex-grow: 1;
+    font-family: 'Goldman', sans-serif;
+}
+
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    width: 100%;
+}
+
+
+
+/* -----------------------------------------------------------------------------------------
+HELP & SETTINGS BUTTONS
+------------------------------------------------------------------------------------------ */ 
+
+.back-btn{
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    margin-right: 10px;
+}
+
+/* -----------------------------------------------------------------------------------------
+// SLIDER CONTAINER BOX STYLING 
+------------------------------------------------------------------------------------------ */ 
+
+.darkmode-container {
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Puts slider on far right */
+  gap: 10px;
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+  background-color: #BBBB;
+  border-radius: 10px;
+  border: 1px solid black; /* Stroke */
+  padding: 12px 16px;
+  margin: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Depth */
+  font-size: 15px;
+  width: auto; /* Automatically scales container width WOW! */
+
+}
+
+/* -----------------------------------------------------------------------------------------
+// SLIDER SWITCH STYLING 
+------------------------------------------------------------------------------------------ */ 
+
+/* Switch block sizing and position*/
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Grey background */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider block */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: #7D706B;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+
+
+/* Circle moving slider functionality */
+ .slider:before {
+  position: absolute;
+  content: "";
+  height: 26px; width: 26px;
+  left: 4px; bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+} 
+
+/* Changes slider background to green (Transition)*/
+input:checked + .slider {
+  background-color: #34c759; 
+}
+
+/* Moves circle in slider */
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
