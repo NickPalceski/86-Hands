@@ -13,6 +13,23 @@ h1 {
 }
 
 /* -----------------------------------------------------------------------------------------
+"GOLDMAN" FONT 
+------------------------------------------------------------------------------------------ */ 
+
+.goldman-regular {
+  font-family: "Goldman", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.goldman-bold {
+  font-family: "Goldman", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+/* -----------------------------------------------------------------------------------------
 HELP & SETTINGS BUTTONS
 ------------------------------------------------------------------------------------------ */ 
 
@@ -35,7 +52,17 @@ HELP & SETTINGS BUTTONS
 // SLIDER CONTAINER BOX STYLING 
 ------------------------------------------------------------------------------------------ */ 
 
+.status-container {
 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+  background-color: blue;
+  border-radius: 10%;
+
+}
 
 /* -----------------------------------------------------------------------------------------
 // SLIDER SWITCH STYLING 
