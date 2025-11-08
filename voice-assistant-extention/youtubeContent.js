@@ -30,30 +30,23 @@ async function searchYouTube(query) {
   searchBox.focus();
   searchBox.value = "";
 
+  // Human-like typing with React-compatible input events
   for (let char of query) {
     searchBox.value += char;
-
-    // Notify React of the change
-    const inputEvent = new Event("input", { bubbles: true });
-    searchBox.dispatchEvent(inputEvent);
-
-    await sleep(70 + Math.random() * 30); // Randomized typing speed
+    searchBox.dispatchEvent(new Event("input", { bubbles: true }));
+    await sleep(70 + Math.random() * 30);
   }
 
-  submitSearch(searchBox);
-}
-
-function submitSearch(input) {
-  const form = input.closest("form");
-  if (form) {
-    form.submit(); // Works reliably on YouTube
+  const searchButton = document.querySelector(
+    "#search-icon-legacy button, ytd-searchbox #search-icon-legacy"
+  );
+  if (searchButton) {
+    searchButton.click();
   } else {
-    // fallback: dispatch Enter key events
-    ["keydown", "keypress", "keyup"].forEach(type => {
-      input.dispatchEvent(new KeyboardEvent(type, { key: "Enter", bubbles: true }));
-    });
+    console.warn("YouTube search button not found");
   }
 }
+
 
 function sleep(ms) {
   return new Promise(r => setTimeout(r, ms));
