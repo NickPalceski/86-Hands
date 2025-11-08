@@ -7,7 +7,38 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function handleCommand(command) {
   console.log("Processing command:", command);
 
-  // Extract site name and query if any
+  // Tab switching
+  if (command.includes("switch to next tab")){
+    chrome.tabs.query({ currentWindow: true }, (tabs) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
+            const currentIndex= activeTabs[0].index;
+            const nextIndex = (currentIndex + 1) % tabs.length;
+            chrome.tabs.update(tabs[nextIndex].id, { active: true });
+        });
+    });
+    return;
+  }
+
+  if (command.includes("switch to previous tab")){
+    chrome.tabs.query({ currentWindow: true }, (tabs) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
+            const currentIndex= activeTabs[0].index;
+            const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+            chrome.tabs.update(tabs[prevIndex].id, { active: true });
+        });
+    });
+    return;
+  }
+
+  // Scrolling Functionality
+  if (command.includes("scroll down") || command.includes("scroll up")) {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "scrollPage", command });
+    });
+    return;
+  }
+
+  // Searching Functionality
   const siteMatch = command.match(/open\s+(\w+)/);
   const queryMatch = command.match(/search\s+(?:for\s+)?(.+)/);
 
@@ -30,6 +61,7 @@ async function handleCommand(command) {
         scriptToInject = "youtubeContent.js"; // dedicated script
       }
 
+      // Run script and send search query
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
         files: [scriptToInject]

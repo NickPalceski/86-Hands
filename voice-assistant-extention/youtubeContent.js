@@ -7,7 +7,20 @@ chrome.runtime.onMessage.addListener((request) => {
   if (request.action === "performSearch" && request.site.includes("youtube")) {
     searchYouTube(request.query);
   }
+
+  if (request.action === "scrollPage") {
+    scrollPage(request.command);
+  }
 });
+
+function scrollPage(command) {
+    const scrollAmount = 400; // Pixels PER scroll
+    if (command.includes("scroll down")) {
+        window.scrollBy({ top: scrollAmount, behavior: "smooth"});
+    } else if (command.includes("scroll up")) {
+        window.scrollBy({ top: -scrollAmount, behavior: "smooth"});
+    }
+}
 
 async function searchYouTube(query) {
   await waitFor(() => document.querySelector("input#search"));
