@@ -37,4 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
   toggle.addEventListener('change', (event) => {
     applyDarkMode(event.target.checked);
   });
+
+  // Back button navigation (click + keyboard)
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      // Navigate back to popup page in the same folder
+      window.location.href = 'popup.html';
+    });
+    backBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        window.location.href = 'popup.html';
+      }
+    });
+  }
 });
