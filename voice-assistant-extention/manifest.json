@@ -12,6 +12,7 @@
 
   "host_permissions": [
     "https://www.youtube.com/*",
+    "https://www.amazon.com/*",
     "<all_urls>"
   ],
 
@@ -23,6 +24,10 @@
     {
       "matches": ["*://*.youtube.com/*"],
       "js": ["youtubeContent.js"]
+    },
+    {
+      "matches": ["*://*.amazon.com/*"],
+      "js": ["amazonContent.js"]
     },
     {
       "matches": ["<all_urls>"],
