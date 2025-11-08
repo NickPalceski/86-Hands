@@ -2,7 +2,6 @@
     Anything regarding youtube content manipulation goes here
 */
 
-
 chrome.runtime.onMessage.addListener((request) => {
   if (request.action === "scrollPage") {
     scrollPage(request.command);
