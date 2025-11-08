@@ -8,19 +8,27 @@
 </head>
 <body>
     <div class="header">
-        <img src="../images/question_mark.png" class="question-mark" alt="Help"/>
+        <img src="../images/question_mark.png" class="question-mark" alt="Help Button"/>
         <h1>86Hands</h1>
-        <a href="./settings.html"><img src="../images/settings_cog.png" class="settings-cog" alt="Settings"/></a>
+        <a href="./settings.html"><img src="../images/settings_cog.png" class="settings-cog" alt="Settings Button"/></a>
     </div>
 
-    <div>
+    <div class="status">
 
-        
+        <label class="switch">
+        <input type="checkbox" id="toggleSwitch">
+        <span class="slider"></span>
+        </label> 
+
+        <p id="status">OFF</p>
+         
 
     </div>
 
 
     
+    <!-- JavaScript Functionality Link-->
+    <script src="popup.js"></script>
 
 </body>
 </html>
