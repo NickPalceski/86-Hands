@@ -1,19 +1,33 @@
 {
   "manifest_version": 3,
-  "name": "Voice Assistant for Chrome",
+  "name": "Voice Command Assistant",
   "version": "1.0",
-  "description": "Control Chrome using your voice!",
-  "permissions": ["tabs", "activeTab", "scripting"],
-  "background": { "service_worker": "background.js" },
-  "action": {
-    "default_popup": "/pages/popup.html",
-    "default_icon": "icons/mockPhoto.png"
+  "description": "Control Chrome actions with voice commands.",
+
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "scripting"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
   },
+
   "content_scripts": [
     {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["youtubeContent.js"]
+    },
+    {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["genericContent.js"],
+      "run_at": "document_idle"
     }
-  ]
-}
+  ],
 
+  "action": {
+    "default_popup": "/pages/popup.html",
+    "default_icon": "/icons/mockPhoto.png"
+  }
+}
