@@ -35,7 +35,19 @@ async function searchYouTube(query) {
     await sleep(70 + Math.random() * 30);
   }
 
-  searchBox.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+  submitSearch(searchBox);
+}
+
+function submitSearch(input) {
+  const form = input.closest("form");
+  if (form) {
+    form.submit(); // Works reliably on YouTube
+  } else {
+    // fallback: dispatch Enter key events
+    ["keydown", "keypress", "keyup"].forEach(type => {
+      input.dispatchEvent(new KeyboardEvent(type, { key: "Enter", bubbles: true }));
+    });
+  }
 }
 
 function sleep(ms) {
