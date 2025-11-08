@@ -32,10 +32,15 @@ async function searchYouTube(query) {
 
   for (let char of query) {
     searchBox.value += char;
-    await sleep(70 + Math.random() * 30);
+
+    // Notify React of the change
+    const inputEvent = new Event("input", { bubbles: true });
+    searchBox.dispatchEvent(inputEvent);
+
+    await sleep(70 + Math.random() * 30); // Randomized typing speed
   }
 
-  submitSearch(searchBox);
+  searchBox.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
 }
 
 function submitSearch(input) {
