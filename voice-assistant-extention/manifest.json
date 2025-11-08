@@ -6,7 +6,7 @@
   "permissions": ["tabs", "activeTab", "scripting"],
   "background": { "service_worker": "background.js" },
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "/pages/popup.html",
     "default_icon": "icons/mockPhoto.png"
   },
   "content_scripts": [
