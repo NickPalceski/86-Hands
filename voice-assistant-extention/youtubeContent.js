@@ -40,7 +40,7 @@ async function searchYouTube(query) {
     await sleep(70 + Math.random() * 30); // Randomized typing speed
   }
 
-  searchBox.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+  submitSearch(searchBox);
 }
 
 function submitSearch(input) {
