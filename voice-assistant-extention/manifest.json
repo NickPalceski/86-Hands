@@ -10,6 +10,11 @@
     "scripting"
   ],
 
+  "host_permissions": [
+    "https://www.youtube.com/*",
+    "<all_urls>"
+  ],
+
   "background": {
     "service_worker": "background.js"
   },
