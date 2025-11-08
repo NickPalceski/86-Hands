@@ -7,7 +7,7 @@
   "background": { "service_worker": "background.js" },
   "action": {
     "default_popup": "popup.html",
-    "default_icon": "icons/mic.png"
+    "default_icon": "icons/mockPhoto.png"
   },
   "content_scripts": [
     {
