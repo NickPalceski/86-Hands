@@ -1,0 +1,28 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    width: 100%;
+}
+
+h1 {
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.question-mark,
+.settings-cog {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.question-mark {
+    margin-right: 10px;
+}
+
+.settings-cog {
+    margin-left: 10px;
+}
