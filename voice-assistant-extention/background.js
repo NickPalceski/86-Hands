@@ -47,6 +47,14 @@ async function handleCommand(command) {
 
   if (!site) return console.warn("No target site found in command.");
 
+  // YouTube search
+  if (site.toLowerCase() === "youtube" && query) {
+    const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+    await chrome.tabs.create({ url: searchUrl });
+    return;
+  }
+
+  // generic sites
   let url = `https://${site}.com`;
   const tab = await chrome.tabs.create({ url });
 
@@ -54,23 +62,20 @@ async function handleCommand(command) {
     if (tabId === tab.id && info.status === "complete") {
       chrome.tabs.onUpdated.removeListener(listener);
 
-      // Inject a site-specific or generic script
-      let scriptToInject = "genericContent.js";
+      // Inject generic script for other sites
+      const scriptToInject = "genericContent.js";
 
-      if (site.includes("youtube")) {
-        scriptToInject = "youtubeContent.js"; // dedicated script
-      }
-
-      // Run script and send search query
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
         files: [scriptToInject]
       }).then(() => {
-        chrome.tabs.sendMessage(tab.id, {
-          action: "performSearch",
-          site,
-          query
-        });
+        if (query) {
+          chrome.tabs.sendMessage(tab.id, {
+            action: "performSearch",
+            site,
+            query
+          });
+        }
       });
     }
   });
