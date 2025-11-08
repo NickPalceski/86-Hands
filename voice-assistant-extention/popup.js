@@ -5,14 +5,11 @@
 // SLIDER SWITCH FUNCTIONALITY 
 // -----------------------------------------------------------------------------------------
 
-document.addEventListener('DOMContentLoaded', () => {
+  // Get elements
   const toggle = document.getElementById('serviceToggle');
   const statusText = document.getElementById('statusText');
 
-  // Verifies elements are present on screen
-  if (!toggle || !statusText) return;
-
+  // Toggle Status
   toggle.addEventListener('change', (event) => {
     statusText.textContent = event.target.checked ? 'ON' : 'OFF';
   });
-});

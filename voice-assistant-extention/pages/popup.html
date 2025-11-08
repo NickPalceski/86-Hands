@@ -28,20 +28,23 @@ Main popup file when  user open's extension.
     <!-- Slider container box -->
     <div class="status-container"> 
         
+        <!-- Status text position-->
+        <div id="status-text">
         <span><b>Status: </b></span>
-        <span id ="statusText">OFF</span> <!-- Set OFF by defeault -->
+        <span id="statusText">OFF</span> <!-- Set OFF by defeault -->
+        </div>
 
     <!-- Slider for toggling extension -->
 
-            <label class="switch">
-            <input type="checkbox" id="serviceToggle">
-            <span class="slider"></span>
-            </label>
+        <label class="switch">
+        <input type="checkbox" id="serviceToggle">
+        <span class="slider"></span>
+        </label>
     </div>
 
     
     <!-- JavaScript Functionality Link-->
-    <script src="popup.js"></script>
+    <script src="../popup.js"></script>
 
 </body>
 </html>
