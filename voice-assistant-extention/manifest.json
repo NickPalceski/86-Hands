@@ -7,16 +7,19 @@
   "permissions": [
     "tabs",
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ],
 
   "host_permissions": [
+    "https://geminiproxy-53jbuxguwq-uc.a.run.app",
     "https://www.youtube.com/*",
     "<all_urls>"
   ],
 
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
 
   "content_scripts": [
