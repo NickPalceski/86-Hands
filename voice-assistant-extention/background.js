@@ -15,14 +15,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (tabs.length > 0 && tabs[0].url && tabs[0].url.startsWith('http')) {
                 const activeTabId = tabs[0].id;
 
-                // Send the message directly to the single active tab
-                chrome.tabs.sendMessage(activeTabId, { 
-                    serviceEnabled: message.serviceEnabled 
-                }).catch((error) => {
-                    // This will often show "Could not establish connection." 
-                    // which is normal if the content script hasn't loaded yet.
-                    console.warn(`Error sending toggle message to tab ${activeTabId}:`, error.message);
-                });
+                const serviceStateMessage = { serviceEnabled: message.serviceEnabled };
+
+                // Wait briefly before sending the message to give content.js time to load
+                setTimeout(() => {
+                    // Use callback form and check chrome.runtime.lastError to avoid unhandled promise rejections
+                    chrome.tabs.sendMessage(activeTabId, serviceStateMessage, (response) => {
+                        if (chrome.runtime.lastError) {
+                            console.warn(`[IGNORED WARNING] Message failed (likely timing/special page): ${chrome.runtime.lastError.message}`);
+                        } else {
+                            // Message delivered successfully (response may be undefined)
+                            // console.log(`Message delivered to tab ${activeTabId}`);
+                        }
+                    });
+                }, 200); // Wait 200ms
             } else {
                 console.warn("Cannot activate speech recognition: No active, valid web page found.");
             }

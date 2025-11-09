@@ -6,7 +6,7 @@
 let serviceEnabled = false;
 let recognition;
 let isListeningForCommand = false; // Only enables speech recognition when this boolean is enabled
-let wakeWords = ["hey 86", "yo 86", "hello 86", "enable 86hands", "hi 86", "86hands"]; // Phrases to start speech recognition
+let wakeWords = ["hey eighty six", "yo 86", "hello 86", "enable 86hands", "hi 86", "86hands"]; // Phrases to start speech recognition
 
 
 // Initializes Chrome's local storage state on startup
@@ -14,10 +14,20 @@ let wakeWords = ["hey 86", "yo 86", "hello 86", "enable 86hands", "hi 86", "86ha
 chrome.storage.local.get('serviceEnabled', (data) => {
 
     serviceEnabled = data.serviceEnabled || false;
-    
-    // Only attempt to start if the service is enabled AND the tab is fully loaded
-    if (serviceEnabled && document.readyState === 'complete') {
-        startWakeListener(); // Starts waiting for wake words to be said
+
+    // Informative log so developers know the content script read storage on load
+    if (serviceEnabled) {
+        console.log("Content script: serviceEnabled is true on load. Will start wake listener when ready.");
+        // If page is already fully loaded, start immediately; otherwise wait for load
+        if (document.readyState === 'complete') {
+            startWakeListener(); // Starts waiting for wake words to be said
+        } else {
+            window.addEventListener('load', () => {
+                startWakeListener();
+            });
+        }
+    } else {
+        console.log("Content script: serviceEnabled is false on load.");
     }
 
 }); // end storage initialization
@@ -27,6 +37,7 @@ chrome.storage.local.get('serviceEnabled', (data) => {
 chrome.runtime.onMessage.addListener((message) => {
     if (typeof message.serviceEnabled !== 'undefined') {
         serviceEnabled = message.serviceEnabled; // Update the global state
+        console.log('Content script: received serviceEnabled message ->', serviceEnabled);
         if (serviceEnabled) {
             startWakeListener(); // Starts the microphone listening
         } else {
@@ -42,6 +53,8 @@ chrome.runtime.onMessage.addListener((message) => {
 
 // Executes when wake words are heard, refer to global variables
 function startWakeListener() {
+
+    console.log('Content script: startWakeListener called (serviceEnabled =', serviceEnabled, ')');
 
     // Only works if webkitSpeechRecognition is available 
     if (typeof webkitSpeechRecognition === 'undefined') {
@@ -75,20 +88,33 @@ function startWakeListener() {
 
                 // After hearing a wake word, start a one-time listener for next command
                 recognition.stop(); // ends wake up phrase recognition
-                setTimeout(startCommandListener, 500); // Adds small delay between shutting down wake word speech recognition and starting command recognitino
+                startCommandListener(); // Adds small delay between shutting down wake word speech recognition and starting command recognitino
       }
     }
 };
 
     // Error Handling
-    recognition.onerror = (e) => console.error("Error in speech detection, value: ", e);
+    recognition.onerror = (e) => {
+        console.error("Error in speech detection, value: ", e.error); // Log the specific error type
+        // If the error is not a lack of permission (which can't be fixed by restarting), try again.
+        if (e.error !== 'not-allowed' && serviceEnabled) {
+            // Stop any running instance before trying to start again
+            recognition.stop(); 
+        }
+    };
 
 
     recognition.onend = () => {
+        // Only restart the wake listener if the service is ON AND we are NOT waiting for a command
         if (serviceEnabled && !isListeningForCommand) {
-            recognition.start(); // keep listening for wake word
-        }
-    };
+            console.log("Restarting wake word listener...");
+            try {
+                recognition.start(); // keep listening for wake word
+            } catch(e) {
+                // Ignore "recognition already started" errors
+            }
+    }
+};
 
     try {
         if (serviceEnabled) {
