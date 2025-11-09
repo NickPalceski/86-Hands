@@ -44,30 +44,14 @@ Install the tools needed for the project's language(s).
 - Browser (Chrome/Edge/Firefox) for testing extension UI
 - Git
 
-Quick start
------------
-1. Clone the repository:
-```bash
-git clone https://github.com/NickPalceski/SharkByte2025.git
-cd SharkByte2025
-```
+## Installation
 
-2. Inspect the subproject:
-```bash
-ls -la
-# You should see a voice-assistant-extention directory
-```
+1. Download or clone this repository
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable "Developer mode" in the top right
+4. Click "Load unpacked" and select the `extension` folder
+5. The extension should now appear in your extensions list
 
-3. Open the extension folder and follow its local install/run instructions (see the section below).
-
-Voice-assistant-extention
--------------------------
-This folder contains the code for the voice assistant extension. Typical contents and suggested README additions inside that folder include:
-- manifest.json / extension manifest
-- src/ — source code
-- package.json or requirements.txt — dependencies
-- build/ or dist/ — build outputs
-- .vscode/ or similar dev configs
 
 Suggested commands to put inside voice-assistant-extention/README.md (adapt to actual stack):
 
@@ -96,12 +80,8 @@ pip install -r requirements.txt
 
 # run dev script
 python -m my_extension.entrypoint
-```
 
 
-```
+**Acknowledgements**
 
-
-Acknowledgements
-----------------
 This project is part of the SharkByte 2025 hackathon submission. Thank you to INIT, INIT MDC, the wonderful organizers, volunteers, and others that made such an incredible event possible.
