@@ -7,7 +7,6 @@
 
 // Import Gemini API files
 import { fetchCommand } from './api-handler.js';
-import { APP_CONSTANTS } from './constants.js';
 
 // Global Variables
 let serviceEnabled = false;
