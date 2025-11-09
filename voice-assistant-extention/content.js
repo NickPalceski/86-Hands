@@ -85,9 +85,18 @@ function startWakeListener() {
 
                 // After hearing a wake word, start a one-time listener for next command
                 recognition.stop(); // ends wake up phrase recognition
+                recognition = null; // allow startWakeListener to create a fresh instance later
                 startCommandListener(); // Adds small delay between shutting down wake word speech recognition and starting command recognition
             }
         }
+    };
+
+    recognition.onstart = () => {
+        console.log('Wake recognition: started');
+    };
+
+    recognition.onaudiostart = () => {
+        console.log('Wake recognition: audio started');
     };
 
     // Error Handling
@@ -96,25 +105,34 @@ function startWakeListener() {
         // If the error is not a lack of permission (which can't be fixed by restarting), try again.
         if (e.error !== 'not-allowed' && serviceEnabled) {
             // Stop any running instance before trying to start again
-            recognition.stop(); 
+            try {
+                recognition.stop();
+            } catch (err) {}
+            recognition = null;
+            // attempt restart after short delay
+            setTimeout(() => {
+                if (serviceEnabled && !isListeningForCommand) startWakeListener();
+            }, 500);
         }
     };
 
 
     recognition.onend = () => {
+        console.log('Wake recognition: ended');
+        // Clear the reference so startWakeListener will recreate a fresh instance
+        recognition = null;
         // Only restart the wake listener if the service is ON AND we are NOT waiting for a command
         if (serviceEnabled && !isListeningForCommand) {
-            console.log("Restarting wake word listener...");
-            try {
-                recognition.start(); // keep listening for wake word
-            } catch(e) {
-                // Ignore "recognition already started" errors
-            }
-    }
-};
+            console.log("Restarting wake word listener (recreate)...");
+            setTimeout(() => {
+                startWakeListener();
+            }, 200);
+        }
+    };
 
     try {
         if (serviceEnabled) {
+            console.log('Starting wake recognition instance...');
             recognition.start(); // Restart speech recognition for command speech
         }
     } catch (e) { // Error Handler
@@ -153,8 +171,19 @@ function startCommandListener() {
 
         // Return to wake-word listening, restarts cycle
         isListeningForCommand = false;
-        setTimeout(startWakeListener, 2000); // Delay between stopping one timer and starting a new one
+        // Best-effort: ensure we restart wake listener after this one-shot ends
+        setTimeout(() => {
+            if (serviceEnabled && !isListeningForCommand) startWakeListener();
+        }, 1200);
   };
+
+    commandRec.onend = () => {
+        console.log('Command recognition ended');
+        // Ensure wake listener resumes if service still enabled
+        if (serviceEnabled && !isListeningForCommand) {
+            setTimeout(() => startWakeListener(), 200);
+        }
+    };
 
     // Error Handling
     commandRec.onerror = (e) => {
