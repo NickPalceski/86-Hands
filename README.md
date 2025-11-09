@@ -35,16 +35,7 @@ voice-assistant-extension/
   │   ├── settings.css      # settings.html styling
 ```
 
-
-🏗️ Prerequisites
--------------
-Install the tools needed for the project's language(s). 
-- Node.js (LTS) and npm or yarn (if extension uses JS/TS)
-- Python 3.8+ (if there are Python components)
-- Browser (Chrome/Edge/Firefox) for testing extension UI
-- Git
-
-## Installation
+## 🛠️ Installation
 
 1. Download or clone this repository
 2. Open Chrome and navigate to `chrome://extensions/`
@@ -52,36 +43,22 @@ Install the tools needed for the project's language(s).
 4. Click "Load unpacked" and select the `extension` folder
 5. The extension should now appear in your extensions list
 
+## 🚗 Usage
 
-Suggested commands to put inside voice-assistant-extention/README.md (adapt to actual stack):
+1. Move to another tab from the Google Chrome extension manager
+2. Enable the extension by clicking the slider in the main page (set to OFF by default)
+3. To start sending commands, say "Hey 86", "Hello 86", or "Yo 86"
+4. Next, clearly say the command you want to have executed (ex. search for an item)
 
-Node (JavaScript/TypeScript)
-```bash
-cd voice-assistant-extention
-# install
-npm install
+## 💻 Development
 
-# build
-npm run build
+This extension was built for SharkByte 2025 and uses:
 
-# run in dev mode
-npm run dev
+- Chrome Extension Manifest V3
+- Chrome Storage API for data persistence
+- Chrome Tabs API for website monitoring
+- Google Gemini API to parsing user speech
 
-# load unpacked extension into your browser
-#  - Chrome: chrome://extensions/ → Load unpacked → select ./voice-assistant-extention
-```
-
-Python (if applicable)
-```bash
-cd voice-assistant-extention
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-# run dev script
-python -m my_extension.entrypoint
-
-
-**Acknowledgements**
+## 👑 Acknowledgements
 
 This project is part of the SharkByte 2025 hackathon submission. Thank you to INIT, INIT MDC, the wonderful organizers, volunteers, and others that made such an incredible event possible.
