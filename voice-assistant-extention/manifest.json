@@ -12,8 +12,8 @@
   ],
 
   "icons": {
-    "48": "/images/2hands48px.png",
-    "128": "/images/2hands128px.png"
+    "48": "/icons/2hands48px.png",
+    "128": "/icons/2hands128px.png"
   },
 
   "host_permissions": [
