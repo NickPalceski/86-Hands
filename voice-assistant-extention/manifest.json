@@ -12,7 +12,7 @@
   ],
 
   "host_permissions": [
-    "https://geminiproxy-53jbuxguwq-uc.a.run.app",
+    "https://geminiproxy-53jbuxguwq-uc.a.run.app/*",
     "https://www.youtube.com/*",
     "https://www.amazon.com/*",
     "<all_urls>"
