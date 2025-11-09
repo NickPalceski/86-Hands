@@ -1,12 +1,11 @@
 // Relates to all user speech-related functions
 
 
-
 // Global Variables
 let serviceEnabled = false;
 let recognition;
 let isListeningForCommand = false; // Only enables speech recognition when this boolean is enabled
-let wakeWords = ["hey eighty six", "yo 86", "hello 86", "enable 86hands", "hi 86", "86hands"]; // Phrases to start speech recognition
+let wakeWords = ["hey 86", "yo 86", "hello 86", "enable 86hands", "hi 86", "86hands"]; // Phrases to start speech recognition
 
 
 // Initializes Chrome's local storage state on startup
@@ -20,7 +19,7 @@ chrome.storage.local.get('serviceEnabled', (data) => {
         console.log("Content script: serviceEnabled is true on load. Will start wake listener when ready.");
         // If page is already fully loaded, start immediately; otherwise wait for load
         if (document.readyState === 'complete') {
-            startWakeListener(); // Starts waiting for wake words to be said
+            startWakeListener();
         } else {
             window.addEventListener('load', () => {
                 startWakeListener();
@@ -30,7 +29,7 @@ chrome.storage.local.get('serviceEnabled', (data) => {
         console.log("Content script: serviceEnabled is false on load.");
     }
 
-}); // end storage initialization
+});
 
 
 // Listens for messages from the popup/service worker to enable/disable the service
@@ -39,12 +38,12 @@ chrome.runtime.onMessage.addListener((message) => {
         serviceEnabled = message.serviceEnabled; // Update the global state
         console.log('Content script: received serviceEnabled message ->', serviceEnabled);
         if (serviceEnabled) {
-            startWakeListener(); // Starts the microphone listening
+            startWakeListener();
         } else {
-            stopListening(); // Stops the microphone listening
+            stopListening();
         }
     }
-}); // end addListener
+});
 
 // -----------------------------------------------------------------------------------------------------------------------------
 // SPEECH RECOGNITION
@@ -61,8 +60,9 @@ function startWakeListener() {
         console.error("Error: webkitSpeechRecognition is not defined in this context.");
         return; 
     }
+
     if (recognition && serviceEnabled) return;
-    console.log("Wake word heard, listen for user speech."); // For confirmation purposes
+    console.log("Listening for wake word...");
 
     // Recognition class/library initialization
     recognition = new webkitSpeechRecognition();
@@ -70,7 +70,7 @@ function startWakeListener() {
     recognition.interimResults = false;
     recognition.lang = 'en-US'; // Language used
 
-  // On heard event
+    // On heard event
     recognition.onresult = async (event) => {
         const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim(); // translates text to lowercase ONLY
         console.log("Heard:", transcript); // Outputs its interpretation of raw user speech
@@ -80,18 +80,15 @@ function startWakeListener() {
             // Checks if user's speech includes one of the wake words
             if (wakeWords.some((phrase) => transcript.includes(phrase))) {
 
-                // For confirmation
-                console.log("Wake word detected! Listening for next command...");
-
                 // Fully enables listening command
                 isListeningForCommand = true;
 
                 // After hearing a wake word, start a one-time listener for next command
                 recognition.stop(); // ends wake up phrase recognition
-                startCommandListener(); // Adds small delay between shutting down wake word speech recognition and starting command recognitino
-      }
-    }
-};
+                startCommandListener(); // Adds small delay between shutting down wake word speech recognition and starting command recognition
+            }
+        }
+    };
 
     // Error Handling
     recognition.onerror = (e) => {
@@ -145,7 +142,7 @@ function startCommandListener() {
   
     commandRec.onresult = async (event) => {
         const commandText = event.results[0][0].transcript;
-        console.log("User command: ", commandText); // Confirms user command
+        console.log("User Command: ", commandText); // Confirms user command
 
 
         // Sends  raw text to the Service Worker (background.js), will handle the secure GCF/Gemini call
@@ -156,7 +153,7 @@ function startCommandListener() {
 
         // Return to wake-word listening, restarts cycle
         isListeningForCommand = false;
-        setTimeout(startWakeListener, 1000); // Delay between stopping one timer and starting a new one
+        setTimeout(startWakeListener, 2000); // Delay between stopping one timer and starting a new one
   };
 
     // Error Handling
@@ -168,7 +165,7 @@ function startCommandListener() {
 
     commandRec.start();
 
-}  // end startCommandListener
+}
 
 // Stop listening to user's speech
 function stopListening() {
@@ -180,4 +177,4 @@ function stopListening() {
   }
   isListeningForCommand = false;
    
-} // end stopListening function
+}

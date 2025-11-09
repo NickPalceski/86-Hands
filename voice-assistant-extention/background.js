@@ -7,7 +7,7 @@ import { fetchCommand } from './api-handler.js';
 // ------------------------------------------------------------------------------------------------------------------------------
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // 1. Handle Toggling (from popup.js)
+    // Handle Toggling (from popup.js)
     if (typeof message.serviceEnabled !== 'undefined') {
         
         // Query for the currently active tab in the focused window
@@ -28,11 +28,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                             // console.log(`Message delivered to tab ${activeTabId}`);
                         }
                     });
-                }, 200); // Wait 200ms
+                }, 400); // Wait 400ms
             } else {
                 console.warn("Cannot activate speech recognition: No active, valid web page found.");
             }
         });
+    }
+    // Handle processing a user command sent from the content script
+    else if (message && message.action === 'processCommand' && typeof message.speechText === 'string') {
+        // Fire-and-forget: process the raw speech text via handleSpeech
+        handleSpeech(message.speechText).catch(err => console.error('Error handling speech:', err));
     }
   });
 
@@ -59,27 +64,76 @@ async function handleSpeech(text) {
 function executeCommand(parsedCommand) {
     const command = parsedCommand.toLowerCase().trim();
 
-    console.log(`Service Worker: Executing command: ${command}`);
+    console.log(`SW: Executing command: ${command}`);
 
-    if (command.startsWith("search:")) {
-        const query = command.substring(7).trim();
-        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-        chrome.tabs.create({ url: searchUrl }); 
-        console.log(`Executed: Search for "${query}"`);
+        // Normalize common AI output formats (camelCase, punctuation, underscores)
+        // so matching using human phrases (e.g. "close tab") works reliably.
+        let normalized = parsedCommand
+            // insert spaces before camelCase boundaries
+            .replace(/([a-z])([A-Z])/g, '$1 $2')
+            // replace non-letters with spaces
+            .replace(/[^a-zA-Z ]+/g, ' ')
+            // collapse whitespace
+            .replace(/\s+/g, ' ')
+            .toLowerCase()
+            .trim();
+
+        console.log(`SW: Normalized command: ${normalized}`);
+
+    if (normalized.includes("close current tab") || normalized.includes("close this tab") || normalized.includes("close tab") || (normalized.includes('close') && normalized.includes('tab'))) {
+        chrome.windows.getCurrent({ populate: true }, (window) => {
+            if (!window || !window.tabs) return;
+            const activeTab = window.tabs.find(t => t.active);
+            if (!activeTab) return;
+            chrome.tabs.remove(activeTab.id);
+            console.log("Executed: Close current tab.");
+        });
     } 
-    else if (command.includes("new_tab")) {
+
+    if (normalized.includes("switch to next tab") || normalized.includes('next tab') || normalized.includes('switch next')) {
+        chrome.windows.getCurrent({ populate: true }, (window) => {
+            if (!window || !window.tabs) return;
+            const activeTab = window.tabs.find(t => t.active);
+            if (!activeTab) return;
+            const currentIndex = activeTab.index;
+            const nextIndex = (currentIndex + 1) % window.tabs.length;
+            chrome.tabs.update(window.tabs[nextIndex].id, { active: true });
+        });
+        return;
+    }
+
+    if (normalized.includes("switch to previous tab") || normalized.includes('previous tab') || normalized.includes('switch previous') || normalized.includes('prev tab')) {
+        chrome.windows.getCurrent({ populate: true }, (window) => {
+            if (!window || !window.tabs) return;
+            const activeTab = window.tabs.find(t => t.active);
+            if (!activeTab) return;
+            const currentIndex = activeTab.index;
+            const prevIndex = (currentIndex - 1 + window.tabs.length) % window.tabs.length;
+            chrome.tabs.update(window.tabs[prevIndex].id, { active: true });
+        });
+        return;
+    }
+
+    if (normalized.includes("scroll down") || normalized.includes("scroll up") || normalized.includes('scroll')) {
+        chrome.windows.getCurrent({ populate: true }, (window) => {
+            if (!window || !window.tabs) return;
+            const activeTab = window.tabs.find(t => t.active);
+            if (!activeTab) return;
+
+            chrome.tabs.sendMessage(activeTab.id, { 
+                action: "scrollPage", 
+                command 
+            });
+        });
+        return;
+    }
+
+    if (normalized.includes("new tab") || normalized.includes('open new tab') || normalized.includes('newtab')) {
         chrome.tabs.create({}); 
         console.log("Executed: New Tab");
     } 
-    else if (command.includes("close_tab")) {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (tabs.length > 0) {
-                chrome.tabs.remove(tabs[0].id);
-                console.log("Executed: Closed current tab.");
-            }
-        });
-    }
-    else if (command.includes("reload") || command.includes("refresh")) {
+    
+    if (normalized.includes("reload") || normalized.includes("refresh") || normalized.includes('reopen') || normalized.includes('reload tab')) {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             if (tabs.length > 0) {
                 chrome.tabs.reload(tabs[0].id);
@@ -88,6 +142,6 @@ function executeCommand(parsedCommand) {
         });
     }
     else {
-        console.warn(`Error: Execution failed: Unrecognized command or error: ${command}`);
+        console.warn(`86 Hands: Unrecognized command or error: ${command} (normalized: ${normalized})`);
     }
 }
