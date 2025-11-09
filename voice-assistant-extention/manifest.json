@@ -22,23 +22,6 @@
     "service_worker": "background.js",
     "type": "module"
   },
-
-  "content_scripts": [
-    {
-      "matches": ["*://*.youtube.com/*"],
-      "js": ["youtubeContent.js"]
-    },
-    {
-      "matches": ["*://*.amazon.com/*"],
-      "js": ["amazonContent.js"]
-    },
-    {
-      "matches": ["<all_urls>"],
-      "js": ["genericContent.js"],
-      "run_at": "document_idle"
-    }
-  ],
-
   "action": {
     "default_popup": "/pages/popup.html",
     "default_icon": "/icons/mockPhoto.png"
