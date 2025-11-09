@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Voice Command Assistant",
+  "name": "86 Hands",
   "version": "1.0",
-  "description": "Control Chrome actions with voice commands.",
+  "description": "Control Chrome actions with voice commands... no hands!",
 
   "permissions": [
     "tabs",
@@ -10,6 +10,11 @@
     "scripting",
     "storage"
   ],
+
+  "icons": {
+    "48": "/images/2hands48px.png",
+    "128": "/images/2hands128px.png"
+  },
 
   "host_permissions": [
     "https://geminiproxy-53jbuxguwq-uc.a.run.app/*"
@@ -27,7 +32,6 @@
     "type": "module"
   },
   "action": {
-    "default_popup": "/pages/popup.html",
-    "default_icon": "/icons/mockPhoto.png"
+    "default_popup": "/pages/popup.html"
   }
 }
