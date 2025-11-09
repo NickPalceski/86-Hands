@@ -13,9 +13,12 @@ let wakeWords = ["hey 86", "yo 86", "hello 86", "enable 86hands", "hi 86", "86ha
 // Similar to the one in popup.js
 chrome.storage.local.get('serviceEnabled', (data) => {
 
-  serviceEnabled = data.serviceEnabled || false;
-  if (serviceEnabled) 
-      startWakeListener(); // Starts waiting for wake words to be said, beginning of speech recognition bee tee dubs
+    serviceEnabled = data.serviceEnabled || false;
+    
+    // Only attempt to start if the service is enabled AND the tab is fully loaded
+    if (serviceEnabled && document.readyState === 'complete') {
+        startWakeListener(); // Starts waiting for wake words to be said
+    }
 
 }); // end storage initialization
 

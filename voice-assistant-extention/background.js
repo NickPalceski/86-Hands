@@ -10,7 +10,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // 1. Handle Toggling (from popup.js)
     if (typeof message.serviceEnabled !== 'undefined') {
         
-        // --- 🚨 CRITICAL FIX: Target the active tab only 🚨 ---
         // Query for the currently active tab in the focused window
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             if (tabs.length > 0 && tabs[0].url && tabs[0].url.startsWith('http')) {
