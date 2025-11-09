@@ -20,20 +20,17 @@ chrome.storage.local.get('serviceEnabled', (data) => {
 }); // end storage initialization
 
 
-// Popup.js sends messages to this function V
+// Listens for messages from the popup/service worker to enable/disable the service
 chrome.runtime.onMessage.addListener((message) => {
-
-  if (typeof message.serviceEnabled !== 'undefined') { // Makes sure value is a boolean (refer to popup.js)
-    serviceEnabled = message.serviceEnabled;
-    if (serviceEnabled) { // if the slider is on, 'enable' background.js file
-      startWakeListener();
-    } 
-    else { // if slider is off, do nothing (closest to turning off background.js)
-      stopListening();
+    if (typeof message.serviceEnabled !== 'undefined') {
+        serviceEnabled = message.serviceEnabled; // Update the global state
+        if (serviceEnabled) {
+            startWakeListener(); // Starts the microphone listening
+        } else {
+            stopListening(); // Stops the microphone listening
+        }
     }
-  }
-
-}); // end popup.js message interpreter
+}); // end addListener
 
 // -----------------------------------------------------------------------------------------------------------------------------
 // SPEECH RECOGNITION
